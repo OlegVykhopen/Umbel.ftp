@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" type="text/css" rel="stylesheet">
+    <link href="subscription.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+
+    <!-- container where subscription table will be placed -->
+    <div class="container">
+        <div id="target"></div>
+    </div>
+
+    <!-- textarea for final json with subscription info -->
+    <textarea style="display: none;" id="resultArea">
+        {"overcast":{"features":[{"feature":"storageGb","quantity":16800}],"storagePools":[{"id":"id1468232192154","displayName":"name1468232192154","ttlHrs":48,"cameras":[{"id":"hd","count":3,"additional":{"bitrate":100,"price":100,"days":2,"storage":2}}]},{"id":"id1468232198638","displayName":"name1468232198638","ttlHrs":48,"cameras":[{"id":"sd","count":1,"additional":{"bitrate":50,"price":200,"days":2,"storage":1}}]}]}}
+    </textarea>
+
+    <!-- template for general layout of subscription table -->
+    <script id="contTemplate" type="x-jquery-tmpl">
+        <div class="row subscriptionTable">
+            <div class="col-xs-12">
+                <div class="sub-cont panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            <button class="btn btn-link btn-sm createPool"><span class="glyphicon glyphicon-plus"></span></button>
+                            <span>Storage Pools:</span>
+                        </h3>
+                    </div>
+                    <div class="panel-body poolTarget">
+
+                    </div>
+                </div>
+                <div class="totalblock">
+                    <h2>Total:</h2>
+                    <h3>
+                        <span class="subscription_result"></span>
+                        <span> / MO<span>
+                    </h3>
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <!-- template for single pool row with all fields -->
+    <script id="poolTemplate" type="x-jquery-template">
+        <div class="row pool" id="${pool.id}">
+            <div class="col-sm-3">
+                <div class="input-group fieldResult" data-count="${cameras.count}">
+                    <div class="input-group-btn">
+                        <div class="btn-group fieldResult" data-bitrate="${cameras.additional.bitrate}" data-id="${cameras.id}" data-price="${cameras.additional.price}">
+                            <button style="width: 98px;" data-toggle="dropdown" type="button" class="btn btn-default dropdown-toggle">
+                                <span class="btn-placeholder">Cameras</span>
+                                <span class="btn-content"></span>
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                {{each(myIndex, myValue) data.plan}}
+                                    <li data-bitrate="${bitrate}" data-id="${id}" data-price="${price}">
+                                        <a>
+                                            ${name}
+                                            <span class="glyphicon glyphicon-ok check-mark"></span>
+                                        </a>
+                                    </li>
+                                {{/each}}
+                            </ul>
+                        </div>
+                    </div>
+                    <input data-key="count" value="${cameras.count}" type="number" min="0" class="form-control">
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="input-group fieldResult" data-days="${cameras.additional.days}">
+                    <span class="input-group-addon">Days</span>
+                    <input value="${cameras.additional.days}" data-key="days" type="number" min="0" class="form-control">
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="input-group fieldResult" data-storage="${cameras.additional.storage}">
+                    <span class="input-group-addon">Storage</span>
+                    <input value="${cameras.additional.storage}" data-key="storage" type="number" min="0" class="form-control">
+                    <span class="input-group-addon">%</span>
+                </div>
+            </div>
+            <div class="col-sm-2 text-center">
+                <div class="input-group fieldResult btn-block">
+                    <a class="btn btn-default poolTotal">
+                        $0.00
+                    </a>
+                </div>
+            </div>
+            <div class="col-sm-1">
+                <div class="input-group">
+                    <span class="input-group-btn">
+                      <button class="btn btn-danger removePool"><span class="glyphicon glyphicon-remove"></span></button>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <!-- additional js sources need to be included on page -->
+    <script src="jquery-1.12.4.min.js" type="text/javascript"></script>
+    <script src="jquery.tmpl.min.js" type="text/javascript"></script>
+    <script src="bootstrap_dropdown.min.js" type="text/javascript"></script>
+    <script src="Subscription.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+
+        // javascript object with input information for subscription calculator
+        var inpObj = {
+            plan: [
+                {
+                    bitrate: 100, // expect integer value
+                    id: "hd",
+                    name: "HD-Cam",
+                    price: 100 // expect integer value
+                },
+                {
+                    bitrate: 50,
+                    id: "sd",
+                    name: "SD-Cam",
+                    price: 200
+                }
+            ],
+            storage: {
+                id: "disk-unit",
+                price: 100 // expect integer value
+            },
+            feature: [
+
+            ]
+        };
+
+        // initializing
+        var subCalc = new Subscription({
+            input: inpObj,
+            cont: $('#target'),
+            outputArea: $('#resultArea'),
+            templates: {
+                main: $('#contTemplate'),
+                pool: $('#poolTemplate')
+            }
+        });
+    </script>
+
+</body>
+</html>

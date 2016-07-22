@@ -1,0 +1,37 @@
+.subscriptionTable .panel-heading .glyphicon-plus{
+    pointer-events: none;
+}
+
+.pool {
+    margin-top: 15px;
+}
+.pool:first-child {
+    margin-top: 0;
+}
+.pool .dropdown-menu li{
+    position: relative;
+}
+.pool .dropdown-menu li a{
+    cursor: pointer;
+}
+.pool .dropdown-menu li a span{
+    display: none;
+}
+.pool .poolTotal{
+    min-width: 90px;
+}
+
+.totalblock{
+    margin-top: 90px;
+    font-family: "Source Sans Pro", sans-serif;
+    text-align: center;
+    font-weight: bold;
+    font-size: 30px;
+}
+.totalblock h2{
+    font-size: 38px;
+}
+.totalblock h3{
+    margin-top: 40px;
+    font-size: 32px;
+}
